@@ -1,18 +1,21 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+## 📌 Cadidate Information
+- **Name:** Nicolle Sena de Mendonça
+- **Email:** nicollesenam@gmail.com
+- **Registration Number:** 8858
+
+## 📖 Description
+This project refers to [SEPLAG's recruitment process](https://seletivo.seplag.mt.gov.br/ver-edital/152) item "Anexo IV". The idea was to implement a SPA based on javascript which shows information about missing people.
+
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone this repo, and go to /my-app/ folder
+2. Build docker image
+``` docker build -t my-app . ```
+3. Run the container
+``` docker run -p 3000:3000 my-app ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
