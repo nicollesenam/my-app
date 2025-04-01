@@ -80,6 +80,7 @@ export default function AddPersonInformation() {
       descricao: attachmentDescription,
       ocoId: currentCardViewedDetail?.ultimaOcorrencia.ocoId,
     };
+    console.log(addInfoRequest);
 
     const formData = new FormData();
     addInfoRequest.anexos.forEach((file) => {

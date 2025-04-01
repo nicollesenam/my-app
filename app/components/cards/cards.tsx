@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import FilterPerson from "@/app/filter-person";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,7 +8,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -24,41 +22,9 @@ import { ptBR } from "date-fns/locale";
 import { atom, useAtom } from "jotai";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Search } from "lucide-react";
-
-interface Person {
-  id: number;
-  nome: string;
-  idade: number;
-  sexo: string;
-  vivo: true;
-  urlFoto: string;
-  ultimaOcorrencia: {
-    dtDesaparecimento: string;
-    dataLocalizacao: string;
-    encontradoVivo: true;
-    localDesaparecimentoConcat: string;
-    ocorrenciaEntrevDesapDTO: {
-      informacao: string;
-      vestimentasDesaparecido: string;
-    };
-    listaCartaz: [
-      {
-        urlCartaz: string;
-        tipoCartaz: string;
-      }
-    ];
-    ocoId: 0;
-  };
-}
-
-interface MissingPersonInfo {
-  ocoId: string;
-  id: number;
-  informacao: string;
-  data: string;
-  anexos: string[];
-}
+import { MissingPersonInfo } from "@/app/interfaces/MissingPersonInfo";
+import { Person } from "@/app/interfaces/Person";
+import HomeHeader from "../home-header/home-header";
 
 export const cardsAtom = atom<Person[]>([]);
 export const totalPagesAtom = atom(1);
@@ -67,6 +33,8 @@ export const additionalInfoCurrentViewedCardAtom = atom<MissingPersonInfo[]>(
   []
 );
 export const isCurrentCardDetailPageAtom = atom<boolean>(false);
+export const missingPeopleCountAtom = atom<number>();
+export const locatedPeopleCountAtom = atom<number>();
 
 export default function Cards() {
   const [, setIsCurrentCardDetailPage] = useAtom(isCurrentCardDetailPageAtom); // verificar se a tela atual é a tela de detalhes do card
@@ -78,9 +46,8 @@ export default function Cards() {
   const [cards, setCards] = useAtom(cardsAtom);
   const [startIndex, setStartIndex] = useState(1);
   const [totalPages, setTotalPages] = useAtom(totalPagesAtom);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [locatedPeopleCount, setLocatedPeopleCount] = useState<number>();
-  const [missingPeopleCount, setMissingPeopleCount] = useState<number>();
+  const [, setLocatedPeopleCount] = useAtom(locatedPeopleCountAtom);
+  const [, setMissingPeopleCount] = useAtom(missingPeopleCountAtom);
 
   const handleDetailClickCard = async (card: Person) => {
     setIsCurrentCardDetailPage(true);
@@ -116,26 +83,6 @@ export default function Cards() {
     }
   };
 
-  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    const typedArr = [];
-    typedArr.push(searchTerm);
-
-    typedArr.forEach(async (letter) => {
-      try {
-        const response = await axios.get(
-          `https://abitus-api.geia.vip/v1/pessoas/aberto/filtro?nome=${letter}`
-        );
-        const data = response.data.content;
-        const cards = data;
-        setCards(cards);
-        setTotalPages(response.data.totalPages || 1);
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  };
-
   const getLocatedAndMissingPeopleCount = async () => {
     try {
       const response = await axios.get(
@@ -160,38 +107,7 @@ export default function Cards() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <div className="space-x-1">
-          <span className="text-sm font-medium text-gray-700">
-            Pessoas desaparecidas:
-          </span>
-          <Badge className="rounded-4xl bg-(--badge-missing) border">
-            {missingPeopleCount}
-          </Badge>
-          <span className="text-sm font-medium text-gray-700">
-            Pessoas encontradas:
-          </span>
-          <Badge className="rounded-4xl bg-(--badge-found) border">
-            {locatedPeopleCount}
-          </Badge>
-        </div>
-
-        <div className="grid w-100 items-center sm:max-w-sm md:max-w-md lg:max-w-lg">
-          <div className="relative flex items-center">
-            <div className="absolute left-2.5 top-2.5 size-4 text-muted-foreground">
-              <Search className="size-4" />
-            </div>
-            <Input
-              placeholder="Buscar pessoa..."
-              className="rounded-lg bg-background pl-8"
-              inputMode="search"
-              onChange={onSearch}
-            />
-            <FilterPerson></FilterPerson>
-          </div>
-        </div>
-      </div>
-
+      <HomeHeader />
       <div
         className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
         key={""}

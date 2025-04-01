@@ -7,7 +7,7 @@ import { ChevronLeft, CircleCheck } from "lucide-react";
 import AddPersonInformation, {
   sendingNewPersonInfoHasFinished,
 } from "../add-person-information/add-person-information";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import AlertPopup from "../alert-popup/alert-popup";
 
 export default function MainPage() {
   const [isCurrentCardDetailPage, setIsCurrentCardDetailPage] = useAtom(
@@ -47,15 +47,13 @@ export default function MainPage() {
             </div>
             <CardDetails />
             {finishedSendingNewInfo && (
-              <Alert className="bg-success">
-                <CircleCheck size={20} color="#2f792f" />
-                <AlertTitle className="text-[#2f792f]">
-                  Informação adicionada com sucesso!
-                </AlertTitle>
-                <AlertDescription className="text-[#2f792f]">
-                  Obrigado pelas informações fornecidas.
-                </AlertDescription>
-              </Alert>
+              <AlertPopup
+                title={"Informação adicionada com sucesso!"}
+                description={"Obrigado pelas informações fornecidas."}
+                icon={<CircleCheck size={20} color="#2f792f" />}
+                classAlert={"text-[#2f792f]"}
+                classTypeAlert={"bg-success"}
+              />
             )}
           </>
         )}
