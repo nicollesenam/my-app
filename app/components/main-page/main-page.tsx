@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { CardDetails } from "../card-details/card-details";
 import Cards, { isCurrentCardDetailPageAtom } from "../cards/cards";
-import { ArrowLeft, CircleCheck } from "lucide-react";
+import { ChevronLeft, CircleCheck } from "lucide-react";
 import AddPersonInformation, {
   sendingNewPersonInfoHasFinished,
 } from "../add-person-information/add-person-information";
@@ -20,27 +20,29 @@ export default function MainPage() {
   };
 
   return (
-    <div className="m-5">
-      <div className="space-y-3 bg-neutral-200 w-full p-8 rounded-(--radius-sm)">
+    <div className="min-h-screen bg-gray-50 pb-10">
+      <div className="space-y-3 rounded-(--radius-sm) max-w-7xl mx-auto py-10">
         {!isCurrentCardDetailPage && (
           <>
-            <span className="font-semibold text-3xl">Início</span>
+            <span className="text-2xl font-bold text-gray-900 mb-2">
+              Início
+            </span>
             <Cards />
           </>
         )}
 
         {isCurrentCardDetailPage && (
           <>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center">
-                <ArrowLeft
-                  className="cursor-pointer"
+            <div className="py-4 flex justify-between items-center border-b border-gray-200 mb-6">
+              <button className="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors">
+                <ChevronLeft
+                  className="mr-1 h-5 w-5 cursor-pointer"
                   onClick={goBackToMainPage}
                 />
-                <span className="font-semibold text-3xl ml-2">
+                <span className="text-xl font-medium">
                   Detalhes do desaparecimento
                 </span>
-              </div>
+              </button>
               <AddPersonInformation />
             </div>
             <CardDetails />

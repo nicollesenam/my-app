@@ -41,9 +41,7 @@ export default function FilterPerson() {
         `https://abitus-api.geia.vip/v1/pessoas/aberto/filtro?sexo=${filterRequest.sexo}&status=${filterRequest.status}&faixaIdadeInicial=${filterRequest.faixaIdadeInicial}&faixaIdadeFinal=${filterRequest.faixaIdadeFinal}`
       );
       const data = response.data.content;
-      console.log(response);
       const cards = data;
-      console.log(cards);
       setCards(cards);
       setTotalPages(response.data.totalPages || 1);
     } catch (error) {
@@ -62,7 +60,7 @@ export default function FilterPerson() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Funnel className="size-8 ml-2 p-2 from-neutral-600 cursor-pointer hover:bg-neutral-300 hover:text-white hover:rounded-3xl hover:scale-110 transition-transform duration-300" />
+        <Funnel className="size-8 ml-2 p-2 rounded-3xl from-neutral-600 cursor-pointer hover:shadow-md hover:rounded-3xl hover:scale-110 transition-shadow duration-300" />
       </PopoverTrigger>
       <PopoverContent className="w-[350px]" side="left">
         <div className="grid gap-4">
@@ -75,7 +73,7 @@ export default function FilterPerson() {
 
           {/* Idade */}
           <div className="grid gap-1">
-            <Label className="text-sm font-medium">Idade</Label>
+            <Label className="text-sm font-medium text-gray-800">Idade</Label>
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-1">
               <input
                 type="number"
@@ -95,7 +93,7 @@ export default function FilterPerson() {
 
           {/* Gênero */}
           <div className="grid gap-1">
-            <Label className="text-sm font-medium">Gênero</Label>
+            <Label className="text-sm font-medium text-gray-800">Gênero</Label>
             <Select value={gender} onValueChange={setGender}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Selecione um gênero" />
@@ -111,7 +109,7 @@ export default function FilterPerson() {
 
           {/* Status */}
           <div className="grid gap-1">
-            <Label className="text-sm font-medium">Status</Label>
+            <Label className="text-sm font-medium text-gray-800">Status</Label>
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Selecione um status" />
@@ -125,7 +123,12 @@ export default function FilterPerson() {
             </Select>
           </div>
 
-          <Button onClick={() => makeRequestWithFilters()}>Filtrar</Button>
+          <Button
+            className="bg-gray-950/80"
+            onClick={() => makeRequestWithFilters()}
+          >
+            Filtrar
+          </Button>
         </div>
       </PopoverContent>
     </Popover>

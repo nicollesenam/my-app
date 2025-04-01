@@ -162,12 +162,20 @@ export default function Cards() {
     <>
       <div className="flex justify-between">
         <div className="space-x-1">
-          <span>Pessoas desaparecidas: </span>
-          <Badge>{missingPeopleCount}</Badge>
-          <span>Pessoas encontradas: </span>
-          <Badge>{locatedPeopleCount}</Badge>
+          <span className="text-sm font-medium text-gray-700">
+            Pessoas desaparecidas:
+          </span>
+          <Badge className="rounded-4xl bg-(--badge-missing) border">
+            {missingPeopleCount}
+          </Badge>
+          <span className="text-sm font-medium text-gray-700">
+            Pessoas encontradas:
+          </span>
+          <Badge className="rounded-4xl bg-(--badge-found) border">
+            {locatedPeopleCount}
+          </Badge>
         </div>
-        {/* grid w-full items-center gap-1.5 sm:max-w-sm md:max-w-2 lg:max-w-0 lg:hover:max-w-100 hover:transition-transform duration-1000 ease-out-in */}
+
         <div className="grid w-100 items-center sm:max-w-sm md:max-w-md lg:max-w-lg">
           <div className="relative flex items-center">
             <div className="absolute left-2.5 top-2.5 size-4 text-muted-foreground">
@@ -185,63 +193,70 @@ export default function Cards() {
       </div>
 
       <div
-        className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+        className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
         key={""}
       >
         {cards.map((card: Person) => {
           return (
-            <Card className="w-full max-w-[340px]" key={card.id}>
-              <CardHeader>
-                <CardTitle className="capitalize">
-                  {formatName(card.nome)}
+            <Card
+              className="overflow-hidden h-full flex flex-col border border-gray-200 shadow-sm hover:shadow-md transition-transform hover:scale-[1.02]"
+              key={card.id}
+            >
+              <CardHeader className="px-0 py-0 pr-4 pl-4">
+                <CardTitle>
+                  <h3 className="font-medium text-gray-900 text-wrap mb-2 h-[25px]">
+                    {formatName(card.nome)}
+                  </h3>
                 </CardTitle>
                 <CardDescription>
-                  <span>Idade: </span>
+                  <span className="font-medium mr-1">Idade: </span>
                   <span>{card.idade === 0 ? "Desconhecida" : card.idade}</span>
                 </CardDescription>
-                <CardDescription className="">
-                  <span>Sexo: </span>
-                  <span className="capitalize">{formatName(card.sexo)}</span>
-                </CardDescription>
-                <CardDescription className="space-y-1.5">
-                  <div className="w-full">
-                    <img
-                      className="object-cover rounded-(--radius-sm) w-full h-[200px]"
-                      alt="retrato da pessoa"
-                      src={
-                        card.urlFoto
-                          ? card.urlFoto
-                          : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-                      }
-                      onError={(e) =>
-                        (e.currentTarget.src =
-                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png")
-                      }
-                    ></img>
-                  </div>
-
-                  {/* se não tiver data de localização, apenas data de desaparecimento = "desaparecido" */}
-                  {card.ultimaOcorrencia.dtDesaparecimento &&
-                    !card.ultimaOcorrencia.dataLocalizacao && (
-                      <Badge className="pt-3.5 pb-3.5 pl-2.5 pr-2.5">
-                        Desaparecido
-                      </Badge>
-                    )}
-
-                  {/* se tiver data de localização, e data de desaparecimento = "localizado" */}
-                  {card.ultimaOcorrencia.dtDesaparecimento &&
-                    card.ultimaOcorrencia.dataLocalizacao && (
-                      <Badge className="pt-3.5 pb-3.5 pl-2.5 pr-2.5">
-                        Localizado
-                      </Badge>
-                    )}
+                <CardDescription>
+                  <span className="font-medium mr-1">Sexo: </span>
+                  <span>{formatName(card.sexo)}</span>
                 </CardDescription>
               </CardHeader>
+
+              <div className="relative aspect-square bg-gray-100 border-b border-gray-200 h-[240px]">
+                <img
+                  className="w-full h-full object-cover"
+                  alt={`Foto de ${card.nome}`}
+                  src={
+                    card.urlFoto
+                      ? card.urlFoto
+                      : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                  }
+                  onError={(e) =>
+                    (e.currentTarget.src =
+                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png")
+                  }
+                ></img>
+
+                {/* se não tiver data de localização, apenas data de desaparecimento = "desaparecido" */}
+                {card.ultimaOcorrencia.dtDesaparecimento &&
+                  !card.ultimaOcorrencia.dataLocalizacao && (
+                    <Badge className="rounded-4xl absolute bottom-2 left-2 bg-(--badge-missing)">
+                      Desaparecido
+                    </Badge>
+                  )}
+
+                {/* se tiver data de localização, e data de desaparecimento = "localizado" */}
+                {card.ultimaOcorrencia.dtDesaparecimento &&
+                  card.ultimaOcorrencia.dataLocalizacao && (
+                    <Badge className="rounded-4xl absolute bottom-2 left-2 bg-(--badge-found)">
+                      Localizado
+                    </Badge>
+                  )}
+              </div>
+
               {/* EM CASO DE DESAPARECIDO */}
-              <CardContent className="space-y-2 h-[160px]">
+              <CardContent className="space-y-2 flex-grow p-4 text-sm bg-white">
                 {card.ultimaOcorrencia.ocorrenciaEntrevDesapDTO?.informacao && (
                   <div>
-                    <span className="font-semibold">Informação: </span>
+                    <span className="font-medium text-gray-80">
+                      Informação:{" "}
+                    </span>
                     <span>
                       {
                         card.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
@@ -254,7 +269,9 @@ export default function Cards() {
                   card.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
                     ?.vestimentasDesaparecido && (
                     <div>
-                      <span className="font-semibold">Vestimentas: </span>
+                      <span className="font-medium text-gray-80">
+                        Vestimentas:{" "}
+                      </span>
                       <span>
                         {formatName(
                           card.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
@@ -268,20 +285,20 @@ export default function Cards() {
                   card.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
                     ?.vestimentasDesaparecido == "" && (
                     <div>
-                      <span className="font-semibold">
+                      <span className="font-medium text-gray-80">
                         Informações não fornecidas.
                       </span>
                     </div>
                   )}
 
                 <div>
-                  <span className="font-semibold">Local: </span>
+                  <span className="font-medium text-gray-800">Local: </span>
                   <span>
                     {card.ultimaOcorrencia.localDesaparecimentoConcat}
                   </span>
                 </div>
                 <div>
-                  <span className="font-semibold">Data: </span>
+                  <span className="font-medium text-gray-800">Data: </span>
                   <span>
                     {format(
                       new Date(card.ultimaOcorrencia.dtDesaparecimento),
@@ -293,8 +310,12 @@ export default function Cards() {
                   </span>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button onClick={() => handleDetailClickCard(card)}>
+              <CardFooter className="p-4 pt-0 border-t border-gray-100">
+                <Button
+                  className="w-full text-blue-700 border-blue-200 hover:bg-blue-50 hover:text-blue-800 hover:border-blue-300 transition-colors"
+                  variant="outline"
+                  onClick={() => handleDetailClickCard(card)}
+                >
                   Ver detalhes
                 </Button>
               </CardFooter>

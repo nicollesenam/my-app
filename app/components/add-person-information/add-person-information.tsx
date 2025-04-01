@@ -125,7 +125,9 @@ export default function AddPersonInformation() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Adicionar Informações</Button>
+        <Button className="bg-gray-950/80 hover:bg-gray-950/100 text-white font-medium shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+          Adicionar Informações
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

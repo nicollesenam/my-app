@@ -1,13 +1,10 @@
 import { useAtom } from "jotai";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ptBR } from "date-fns/locale";
-import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import {
   additionalInfoCurrentViewedCardAtom,
@@ -35,25 +32,17 @@ export function CardDetails() {
       .join(" "); // Junta novamente as palavras com espaços
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleImageForbidden = (e: any) => {
-    let result = e.currentTarget.src;
-    result =
-      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
-    return result;
-  };
-
   return (
-    <div className="flex flex-row gap-3" key={""}>
-      <Card className="w-full max-w-[340px]" key={currentCardViewedDetail?.id}>
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6" key={""}>
+      <Card className="lg:col-span-1 " key={currentCardViewedDetail?.id}>
         <CardHeader>
-          <CardTitle className="capitalize">
+          <CardTitle className="text-xl font-bold text-gray-800 mb-1">
             {formatName(
               currentCardViewedDetail?.nome ? currentCardViewedDetail.nome : ""
             )}
           </CardTitle>
           <CardDescription>
-            <span>Idade: </span>
+            <span className="text-gray-600">Idade: </span>
             <span>
               {currentCardViewedDetail?.idade === 0
                 ? "Desconhecida"
@@ -61,7 +50,7 @@ export function CardDetails() {
             </span>
           </CardDescription>
           <CardDescription className="">
-            <span>Sexo: </span>
+            <span className="text-gray-600">Sexo: </span>
             <span className="capitalize">
               {formatName(
                 currentCardViewedDetail?.sexo
@@ -80,89 +69,89 @@ export function CardDetails() {
                     ? currentCardViewedDetail.urlFoto
                     : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
                 }
-                onError={(e) => handleImageForbidden(e)}
+                onError={(e) =>
+                  (e.currentTarget.src =
+                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png")
+                }
               ></img>
             </div>
 
             {/* se não tiver data de localização, apenas data de desaparecimento = "desaparecido" */}
             {currentCardViewedDetail?.ultimaOcorrencia.dtDesaparecimento &&
               !currentCardViewedDetail?.ultimaOcorrencia.dataLocalizacao && (
-                <Badge className="p-4">Desaparecido</Badge>
+                <Badge className="rounded-4xl bg-(--badge-missing)">
+                  Desaparecido
+                </Badge>
               )}
 
             {/* se tiver data de localização, e data de desaparecimento = "localizado" */}
             {currentCardViewedDetail?.ultimaOcorrencia.dtDesaparecimento &&
               currentCardViewedDetail?.ultimaOcorrencia.dataLocalizacao && (
-                <Badge className="p-4">Localizado</Badge>
+                <Badge className="rounded-4xl bg-(--badge-found)">
+                  Localizado
+                </Badge>
               )}
           </CardDescription>
         </CardHeader>
-        {/* EM CASO DE DESAPARECIDO */}
       </Card>
 
-      <div className="grid grid-cols-4 gap-4">
-        {additionalMissingPersonInfo?.map(
-          (additionalInfo: MissingPersonInfo) => {
-            return (
-              <Card
-                className="w-full max-w-[340px]  max-h-[300px]"
-                key={additionalInfo.id}
-              >
-                <CardContent className="space-y-2 h-[160px]">
-                  {additionalInfo.informacao && (
-                    <div>
-                      <span className="font-semibold">
-                        Informações gerais:{" "}
-                      </span>
-                      <span>{additionalInfo.informacao}</span>
+      {/* Occurrences Grid */}
+      <div className="lg:col-span-3">
+        <div className="h-[calc(100vh-180px)] overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {additionalMissingPersonInfo.map(
+              (additionalInfo: MissingPersonInfo) => {
+                return (
+                  <div
+                    key={additionalInfo.id}
+                    className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 w-[300px] flex flex-col overflow-hidden"
+                  >
+                    <div className="mb-2">
+                      <h3 className="font-medium text-gray-800">
+                        Informações gerais:
+                      </h3>
+                      <p className="text-gray-600 line-clamp-3">
+                        {additionalInfo.informacao}
+                      </p>
                     </div>
-                  )}
-                  <div>
-                    <span className="font-semibold">Data: </span>
-                    <span>
-                      {format(
-                        new Date(additionalInfo.data),
-                        "dd 'de' MMMM 'de' yyyy, HH:mm",
-                        {
-                          locale: ptBR,
-                        }
-                      )}
-                    </span>
-                  </div>
 
-                  {additionalInfo.anexos.length > 0 && (
-                    <div>
-                      <span className="font-semibold">Anexos: </span>
-                      <div className="w-full flex flex-col">
-                        <ul>
-                          {additionalInfo.anexos.map((anexo, index) => (
-                            <a
-                              key={anexo}
-                              href={anexo}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500"
-                            >
-                              <li>Anexo {index + 1}</li>
-                            </a>
-                          ))}{" "}
-                        </ul>
+                    {additionalInfo.data && (
+                      <div className="mb-2">
+                        <h3 className="font-medium text-gray-800">Data:</h3>
+                        <p className="text-gray-600">{additionalInfo.data}</p>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {additionalInfo.anexos.length <= 0 && (
-                    <div>
-                      <span className="font-semibold">
+                    {additionalInfo.anexos &&
+                      additionalInfo.anexos.length > 0 && (
+                        <div className="mb-2">
+                          <h3 className="font-medium text-gray-800">Anexos:</h3>
+                          <div className="overflow-y-auto max-h-[100px] pr-1">
+                            {additionalInfo.anexos.map((attachment, index) => (
+                              <a
+                                key={attachment}
+                                href={attachment}
+                                target="_blank"
+                                className="block text-blue-500 hover:text-blue-700 transition-colors mb-1"
+                              >
+                                <li>Anexo {index + 1}</li>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                    {additionalInfo.anexos.length <= 0 && (
+                      <p className="text-sm text-gray-500 italic mt-auto">
                         Esta ocorrência não possui anexos.
-                      </span>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          }
-        )}
+                      </p>
+                    )}
+                  </div>
+                );
+              }
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
