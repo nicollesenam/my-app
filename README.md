@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## 📌 Cadidate Information
 - **Name:** Nicolle Sena de Mendonça
 - **Email:** nicollesenam@gmail.com
-- **Registration Number:** XXXXXXX
+- **Registration Number:** 8858
 
 ## 📖 Description
 This project refers to [SEPLAG's recruitment process](https://seletivo.seplag.mt.gov.br/ver-edital/152) item "Anexo IV". The idea was to implement a SPA based on javascript which shows information about missing people.
