@@ -2,12 +2,13 @@
 
 import { useAtom } from "jotai";
 import { CardDetails } from "../card-details/card-details";
-import Cards, { isCurrentCardDetailPageAtom } from "../cards/cards";
+import Cards from "../cards/cards";
 import { ChevronLeft, CircleCheck } from "lucide-react";
 import AddPersonInformation, {
   sendingNewPersonInfoHasFinished,
 } from "../add-person-information/add-person-information";
 import AlertPopup from "../alert-popup/alert-popup";
+import { isCurrentCardDetailPageAtom } from "../person-card/person-card";
 
 export default function MainPage() {
   const [isCurrentCardDetailPage, setIsCurrentCardDetailPage] = useAtom(

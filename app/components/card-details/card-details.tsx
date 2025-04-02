@@ -6,11 +6,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import OcurrencesCard from "../occurrences-card/occurrences-card";
 import {
   additionalInfoCurrentViewedCardAtom,
   currentViewedCardDetailAtom,
-} from "../cards/cards";
-import OcurrencesCard from "../occurrences-card/occurrences-card";
+} from "../person-card/person-card";
 
 export function CardDetails() {
   const [currentCardViewedDetail] = useAtom(currentViewedCardDetailAtom);

@@ -21,12 +21,12 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { ptBR } from "date-fns/locale";
+import { atom, useAtom } from "jotai";
+import axios from "axios";
 import {
   additionalInfoCurrentViewedCardAtom,
   currentViewedCardDetailAtom,
-} from "../cards/cards";
-import { atom, useAtom } from "jotai";
-import axios from "axios";
+} from "../person-card/person-card";
 
 export const sendingNewPersonInfoHasFinished = atom(false);
 
